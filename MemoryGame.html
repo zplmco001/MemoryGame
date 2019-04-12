@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Imitation Game</title>
+        <style>
+            h1{
+                background-color: grey;
+                color: white;
+            }
+            .row{
+                display: grid;
+                grid-template-columns: 100px 100px 100px 100px;
+                grid-column-gap: 10px;
+            }
+            .column{
+                border: 1px solid black;
+                width: 100px;
+                height: 100px;
+                margin: 5px;
+            
+            }
+            #div1{
+                margin-left: 80px;
+            }
+            button{
+                margin: 10px;
+            }
+            img{
+                width: 100px;
+                height: 100px;
+            }
+            
+        
+        </style>
+        <script>
+            window.addEventListener("load",function(){
+                
+                var boxes = document.getElementsByTagName("img")
+                var config = [0,0,0,0,0,0,0,0]
+                var under = []
+                var show = document.getElementById("show")
+                var start = document.getElementById("start")
+                var clickcount = 0
+                var flag = 0
+                var clickedIndex = []
+                
+                show.onclick = function(){
+                        flag = 1
+                        for(var i=0;i<boxes.length;i++){
+                            reveal(i)
+                        }
+                        flag = 0
+                    
+                }
+                
+                start.onclick = function(){
+                    var sec = 0
+                    var min = 0
+                    var hour = 0
+                    var time = document.getElementById("timer")
+                    if(flag==0){
+                        for(var i=0;i<boxes.length;i++){
+                            boxes[i].setAttribute("src","mark.jpeg")
+                        }
+                    }
+                    flag = 1
+                    show.disabled = true
+                    foo()
+                    function foo(){
+                        
+                        if(sec==60){
+                            sec=0;
+                            min++;
+                        }
+                        if(min == 60){
+                            min = 0
+                            hour++;
+                        }
+                        time.innerHTML = hour+":"+min+":"+sec
+                        sec++
+                        if(counter<8){
+                            setTimeout(foo,1000)
+                        }
+                        if (counter==8){
+                            setTimeout(function(){
+                               if( confirm("Your score is:"+time.innerHTML+" Play again?"))                                     document.location.reload()
+                            },500)
+                                    
+                        }
+                    }
+                }
+                
+                
+                for(var i=0;i<boxes.length;i++){
+                    assign(i)
+                    boxes[i].addEventListener("click",clicked(i))
+                }
+                var counter = 0
+                function clicked(k){
+                    
+                    return function(){
+                        
+                        if(flag==1){
+                            clickcount++
+                            if(clickcount == 1){
+                                clickedIndex[0] = k
+                                reveal(k)
+                            }
+                            else if(clickcount ==2){
+                                console.log(k)
+                                clickedIndex[1] = k
+                                reveal(k)
+                                flag = 0
+                                
+                                if(clickedIndex[0] == clickedIndex[1]){
+                                    clickcount--
+                                    return;
+                                }
+                                else if(under[clickedIndex[0]]!=under[clickedIndex[1]]){
+                                    
+                                    setTimeout(function(){
+                                        boxes[clickedIndex[0]].setAttribute("src","mark.jpeg")
+                                        boxes[clickedIndex[1]].setAttribute("src","mark.jpeg")
+                                        flag = 1
+                                    },2000)
+                                }
+                                else{
+                                    flag=1
+                                    counter++
+                                }
+                                clickcount = 0
+                                
+                            }
+                            
+                        }
+                    }
+                        
+                }
+                var def = 0
+                function assign(a){
+                    
+                    var x = Math.floor(Math.random() * 8)
+                    var images = ["img1.jpg","img2.jpg","img3.jpg","img4.jpg",
+                    "img5.jpg","img6.jpg","img7.jpg","img8.jpg"]
+                    if(config[x]<2){
+                        config[x]++
+                        under[a] = images[x]
+                        def++
+                    }
+                    else {
+                        assign(a)
+                    }
+                    
+                }
+                function reveal(x){
+                    if(flag == 1)
+                        boxes[x].setAttribute("src",under[x])
+                }
+                
+                
+            })
+            
+        
+        </script>
+    </head>
+    <body>
+        <h1>Welcome to Imitation Game</h1>
+        
+        <div id="div1">
+            <p id="timer">00:00:00</p>
+            <button id="start">Start</button>
+            <div id="main">
+                <div class="row">
+                    <div class="column">
+                        <img src="mark.jpeg">
+                    </div>
+                    <div class="column">
+                        <img src="mark.jpeg">
+                    </div>
+                    <div class="column">
+                        <img src="mark.jpeg">
+                    </div>
+                    <div class="column">
+                        <img src="mark.jpeg">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column">
+                        <img src="mark.jpeg">
+                    </div>
+                    <div class="column">
+                        <img src="mark.jpeg">
+                    </div>
+                    <div class="column">
+                        <img src="mark.jpeg">
+                    </div>
+                    <div class="column">
+                        <img src="mark.jpeg">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column">
+                        <img src="mark.jpeg">
+                    </div>
+                    <div class="column">
+                        <img src="mark.jpeg">
+                    </div>
+                    <div class="column">
+                        <img src="mark.jpeg">
+                    </div>
+                    <div class="column">
+                        <img src="mark.jpeg">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column">
+                        <img src="mark.jpeg">
+                    </div>
+                    <div class="column">
+                        <img src="mark.jpeg">
+                    </div>
+                    <div class="column">
+                        <img src="mark.jpeg">
+                    </div>
+                    <div class="column">
+                        <img src="mark.jpeg">
+                    </div>
+                </div>
+            
+            </div>
+        <button id="show">Show All</button>
+        </div>
+        
+        
+    </body>
+    
+</html>
